@@ -8,6 +8,6 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-double quadratic_c(double, double);
+double quadratic_c(float, double);
 
 #endif /* MAIN_H_ */

@@ -12,16 +12,21 @@
 int main()
 {
 	// Initialisation des variables
-	double c = 4, x0 = 0.321;
-	double result[300] = {0};
-	int i = 0;
+	float c = 4, x0 = 0.321;
+	double *values = NULL;
+	int i = 0, maxiter = 300;
 	FILE* wrote_f = NULL;
+	values = malloc(maxiter*sizeof(double));
+	if(values == NULL)
+	{
+		exit(0);
+	}
 
 	// Calcul de l'orbite
-	result[0] = x0;
-	for(i = 1 ; i <= 300 ; i++)
+	values[0] = x0;
+	for(i = 1 ; i <= maxiter ; i++)
 	{
-		result[i] = quadratic_c(c, result[i - 1]);
+		values[i] = quadratic_c(c, values[i - 1]);
 	}
 
 	// Ecriture dans le fichier
@@ -35,15 +40,17 @@ int main()
 		fprintf(wrote_f,"#orbite de %f, fonction quadratique %fx(1-x)\n", x0, c);
 		for(i = 0 ; i <= 300 ; i++)
 		{
-			fprintf(wrote_f, "%f\n", result[i]);
+			fprintf(wrote_f, "%f\n", values[i]);
 		}
 		fclose(wrote_f);
 	}
+	free(values);
+
 
 	return 0;
 }
 
-double quadratic_c(double c, double x)
+double quadratic_c(float c, double x)
 {
 	return c*x*(1-x);
 }
