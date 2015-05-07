@@ -9,10 +9,10 @@
 #include <math.h>
 #include "oned.h"
 
-int main()
+int main(int argc, char* argv[])
 {
 	// Initialisation des variables
-	float c = 4, x0 = 0.321;
+	float c = 0, x0 = 0;
 	double *values = NULL;
 	int i = 0, maxiter = 300;
 	FILE* wrote_f = NULL;
@@ -21,6 +21,8 @@ int main()
 	{
 		exit(0);
 	}
+	c = strtof(argv[1], NULL);
+	x0 = strtof(argv[2], NULL);
 
 	// Calcul de l'orbite
 	values[0] = x0;
