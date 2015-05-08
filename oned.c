@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	{
 		exit(0);
 	}
-	// Name of the file we will write
+	// Name of the file we will write : o_c-x0
 	fname = malloc(13*sizeof(char));
 	c = strtof(argv[1], NULL);
 	x0 = strtof(argv[2], NULL);
@@ -31,10 +31,7 @@ int main(int argc, char* argv[])
 
 	// Calculation of the orbit
 	values[0] = x0;
-	for(i = 1 ; i <= maxiter ; i++)
-	{
-		values[i] = quadratic_c(c, values[i - 1]);
-	}
+	calculate_orbit(values, maxiter, c, quadratic_c);
 
 	// Writing
 	wrote_f = fopen(fname, "w");
@@ -44,7 +41,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		fprintf(wrote_f,"#orbite de %f, fonction quadratique %fx(1-x)\n", x0, c);
+		fprintf(wrote_f,"#%f orbit", x0);
 		for(i = 0 ; i <= maxiter ; i++)
 		{
 			fprintf(wrote_f, "%f\n", values[i]);
@@ -55,6 +52,16 @@ int main(int argc, char* argv[])
 
 
 	return 0;
+}
+
+void calculate_orbit(double *values, int maxiter, float c, double (*F)(float, double))
+{
+	int i = 0;
+	for(i = 1 ; i <= maxiter ; i++)
+	{
+		values[i] = F(c, values[i - 1]);
+	}
+
 }
 
 double quadratic_c(float c, double x)
