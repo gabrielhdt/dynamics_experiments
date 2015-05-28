@@ -24,6 +24,15 @@
 
 int main(int argc, char* argv[])
 {
+    if(argc <= 2)
+    {
+        printf("Orbit calculator , Copyright (C) 2015 Gabriel Hondet\n");
+        printf("Orbit calculator comes with ABSOLUTELY NO WARRANTY; for details type `show w'.\n");
+        printf("This is free software, and you are welcome to redistribute it\n");
+        printf("under certain conditions; type `show c' for details.\n");
+        printf("Missing arguments : indicate first function parameter then initial point");
+        exit(0);
+    }
 	// Initialisation of variables
 	float c = 0, x0 = 0;
 	double *values = NULL;
