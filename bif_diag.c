@@ -3,34 +3,54 @@
 int main(int argc, char* argv[])
 {
     double **array_bif = NULL;
-    double orbit[ITER_BIF];
+    //double *array_bif = NULL;
+    double *orbit = NULL;
     int i = 0 ,j = 0,n_iter = 0;
-    float c = 0, x0 = 0.324543;
+    float c = 0;
+    double x0 = 0.23748;
     char *fname = NULL;
     FILE* wrote_f = NULL;
+    orbit = malloc(ITER_BIF*sizeof(double));
     if(orbit == NULL)
     {
+        printf("Error initializing orbit\n");
         exit(0);
     }
+    printf("Init OK\n");
     /* On essaie d'abord la fonction
      * quadratique avec 0<c<4 */
-    n_iter = (int)(4 - 0)/200;
+    // On définit le pas
+    n_iter = (int)(4 - 0)/0.5;
+    printf("%d", n_iter);
     array_bif = malloc(n_iter*ITER_BIF*sizeof(double));
-    for(i = 0 ; i <= n_iter ; i)
+    if(array_bif == NULL)
     {
-        calculate_orbit(array_bif[i], c, quadratic_c);
+        printf("Error initializing array\n");
+        exit(0);
     }
+    printf("Array OK\n");
+    for(i = 0 ; i <= n_iter ; i++)
+    {
+        memset(orbit, 0, ITER_BIF*sizeof(double));
+        orbit[0] = x0;
+        calculate_orbit(orbit, c, quadratic_c);
+        array_bif[i] = orbit;
+        c = c + (4 - 0)/0.5;
+    }
+    printf("Calcul OK\n");
     // Writing file
+    fname = malloc(12*sizeof(char));
     sprintf(fname, "bif_diag_%0.3f", x0);
     wrote_f = fopen(fname, "w");
-    if(wrote_f = NULL)
+    printf("Ouverture OK\n");
+    if(wrote_f == NULL)
     {
         printf("Error opening file");
         exit(0);
     }
     else
     {
-        fprintf(wrote_f, "#Diagramme de bifurcation");
+        fprintf(wrote_f, "#Diagramme de bifurcation\n");
         for(i = 0 ; i <= n_iter; i++)
         {
            for(j = 0; j <= ITER_BIF ; j++)

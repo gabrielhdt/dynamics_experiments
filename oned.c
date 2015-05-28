@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 {
 	// Initialisation of variables
 	float c = 0, x0 = 0;
-	double *values = NULL, *values_bif = NULL, *array_bif = NULL;
+	double *values = NULL;
 	int i = 0, maxiter = 300;
 	char *fname = NULL;
 	FILE* wrote_f = NULL;
@@ -23,12 +23,6 @@ int main(int argc, char* argv[])
 	{
 		exit(0);
 	}
-    // Creation of 2D array containing bifurcation diagram
-    values_bif = malloc(ITER_BIF*sizeof(double));
-    if(values == NULL)
-    {
-        exit(0);
-    }
 	// Name of the file we will write : o_c-x0
 	fname = malloc(13*sizeof(char));
 	c = strtof(argv[1], NULL);
