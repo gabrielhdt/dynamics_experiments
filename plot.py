@@ -37,7 +37,7 @@ def main():
                 y.append(float(line.rstrip()))
                 i += 1
         f.close()
-    pl.plot(x,y, 'o')
+    pl.plot(x,y, '-o')
     pl.xlabel('Iterations')
     pl.ylabel('Image')
     pl.show()

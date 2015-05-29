@@ -17,9 +17,6 @@
 *  MA 02110-1301, USA.
 *  
 */  
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include "oned.h"
 
 int main(int argc, char* argv[])
@@ -36,11 +33,11 @@ int main(int argc, char* argv[])
 	// Initialisation of variables
 	float c = 0, x0 = 0;
 	double *values = NULL;
-	int i = 0, maxiter = 300;
+	int i = 0;
 	char *fname = NULL;
 	FILE* wrote_f = NULL;
 	// Creation of the array containing orbit
-	values = malloc(maxiter*sizeof(double));
+	values = malloc(MAXITER*sizeof(double));
 	if(values == NULL)
 	{
 		exit(0);
@@ -53,7 +50,7 @@ int main(int argc, char* argv[])
 
 	// Calculation of the orbit
 	values[0] = x0;
-	calculate_orbit(values, maxiter, c, quadratic_c);
+	calculate_orbit(values, c, quadratic_c);
 
 	// Writing
 	wrote_f = fopen(fname, "w");
@@ -63,8 +60,8 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		fprintf(wrote_f,"#%f orbit", x0);
-		for(i = 0 ; i <= maxiter ; i++)
+		fprintf(wrote_f,"#%f orbit\n", x0);
+		for(i = 0 ; i <= MAXITER ; i++)
 		{
 			fprintf(wrote_f, "%f\n", values[i]);
 		}
@@ -75,10 +72,10 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void calculate_orbit(double *values, int maxiter, float c, double (*F)(float, double))
+void calculate_orbit(double *values, float c, double (*F)(float, double))
 {
 	int i = 0;
-	for(i = 1 ; i <= maxiter ; i++)
+	for(i = 1 ; i <= MAXITER ; i++)
 	{
 		values[i] = F(c, values[i - 1]);
 	}
