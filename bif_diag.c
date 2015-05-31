@@ -20,10 +20,9 @@
 #include "bif_diag.h"
 int main(int argc, char* argv[])
 {
-    double **array_bif = NULL;
     double *orbit = NULL;
-    int i = 0 ,j = 0,n_iter = 0;
-    float c = 0;
+    int i = 0 ,j = 0,n_iter = 0, n_c = 100;
+    float c = 0, c_min = 0, c_max = 4, pas = 0;
     double x0 = 0.23748;
     char *fname = NULL;
     FILE* wrote_f = NULL;
@@ -33,50 +32,36 @@ int main(int argc, char* argv[])
         printf("Error initializing orbit\n");
         exit(0);
     }
-    printf("Init OK\n");
+    fname = malloc(12*sizeof(char));
+    sprintf(fname, "bif_diag_%0.3f", x0);
+    wrote_f = fopen(fname, "w");
+    if(wrote_f == NULL)
+        exit(0);
+    else
+        fprintf(wrote_f, "#Diagramme de bifurcation");
+
     /* On essaie d'abord la fonction
      * quadratique avec 0<c<4 */
     // On définit le pas
-    n_iter = (int)(4 - 0)/0.5;
-    printf("%d", n_iter);
-    array_bif = malloc(n_iter*ITER_BIF*sizeof(double));
-    if(array_bif == NULL)
-    {
-        printf("Error initializing array\n");
-        exit(0);
-    }
-    printf("Array OK\n");
+    // Par nombre de valeurs
+    // pas = étendue/ nombre de valeurs
+    pas = fabsf(c_max - c_min)/n_c;
+    printf("%f\n", pas);
+    n_iter = 100;
     for(i = 0 ; i <= n_iter ; i++)
     {
         memset(orbit, 0, ITER_BIF*sizeof(double));
         orbit[0] = x0;
         calculate_orbit(orbit, c, quadratic_c);
-        array_bif[i] = orbit;
-        c = c + (4 - 0)/0.5;
-    }
-    printf("Calcul OK\n");
-    // Writing file
-    fname = malloc(12*sizeof(char));
-    sprintf(fname, "bif_diag_%0.3f", x0);
-    wrote_f = fopen(fname, "w");
-    printf("Ouverture OK\n");
-    if(wrote_f == NULL)
-    {
-        printf("Error opening file");
-        exit(0);
-    }
-    else
-    {
-        fprintf(wrote_f, "#Diagramme de bifurcation\n");
-        for(i = 0 ; i <= n_iter; i++)
+        fprintf(wrote_f, "\nc=%0.3f:", c);
+        // We don't plot the first 100 points
+        for(j = 100 ; j <= ITER_BIF ; j++)
         {
-           for(j = 0; j <= ITER_BIF ; j++)
-           {
-              fprintf(wrote_f, "%f/", array_bif[i][j]);
-           }
-          fprintf(wrote_f, "\n");
+            fprintf(wrote_f, "%f;", orbit[j]);
         }
+        c += pas;
     }
+    free(orbit);
     fclose(wrote_f);
 
     return 0;
