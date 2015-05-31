@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
         memset(orbit, 0, ITER_BIF*sizeof(double));
         orbit[0] = x0;
         calculate_orbit(orbit, c, quadratic_c);
-        fprintf(wrote_f, "\nc=%0.3f:", c);
+        fprintf(wrote_f, "\n%0.3f:", c);
         // We don't plot the first 100 points
         for(j = 100 ; j <= ITER_BIF ; j++)
         {
