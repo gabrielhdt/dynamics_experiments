@@ -27,6 +27,7 @@ import pygal
 
 def main():
     plot_orbit()
+    plot_bif_diag()
     return 0
 
 def plot_orbit():
@@ -60,8 +61,8 @@ def plot_bif_diag():
     i = 0
     y = []
     x = 0. # Corresponds to the value of the parameter
-    chart = pygal.XY(stroke=False)
-    chart.title = 'Diagramme de bifurcation'
+    #chart = pygal.XY(stroke=False)
+    #chart.title = 'Diagramme de bifurcation'
     with open('bif_diag', 'r') as f:
         for line in f:
             if line[0] == '#':
@@ -69,7 +70,12 @@ def plot_bif_diag():
             else:
                 sep_param = line.index(':')
                 c = float(line[0:sep_param-1])
-                y = line[sep_param+1:-1].rstrip().split(';')
+                y_ch = line[sep_param+1:-1].rstrip().split(';')
+                if '' in y_ch:
+                    y_ch.remove('')
+                y = [float(elt) for elt in y_ch]
+                pl.plot([c]*len(y), y, '.b')
+    pl.show()
 if __name__ == '__main__':
     main()
 

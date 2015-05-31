@@ -1,5 +1,5 @@
 /*
-*  Copyright 2015 gabriel <gabrielhondet@gmail.com>
+*  Copyright 2015 Gabriel Hondet <gabrielhondet@gmail.com>
 *  
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -16,7 +16,13 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 *  MA 02110-1301, USA.
 *  
-*/  
+*/
+/*
+ * Ce programme crée le diagramme de bifurcation, illustrant la
+ * period doubling route to chaos de la fonction quadratique.
+ * Il calcule l'orbite d'un x0 (500 premiers points) en faisant
+ * varier le paramètre c de la fonction Qc(x) = cx(1-x)
+ */
 #include "bif_diag.h"
 int main(int argc, char* argv[])
 {
@@ -41,10 +47,9 @@ int main(int argc, char* argv[])
         fprintf(wrote_f, "#Diagramme de bifurcation");
 
     /* On essaie d'abord la fonction
-     * quadratique avec 0<c<4 */
-    // On définit le pas
-    // Par nombre de valeurs
-    // pas = étendue/ nombre de valeurs
+     * quadratique avec 0<c<4
+     * On définit le nombre de valeurs de c
+     * pas = étendue/ nombre de valeurs*/
     pas = fabsf(c_max - c_min)/n_c;
     printf("%f\n", pas);
     n_iter = 100;
