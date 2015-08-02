@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{typearea}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{unicode-math}
+\usepackage{fontspec}
+\usepackage[frenchb]{babel}
+\usepackage{ellipsis,xspace,xfrac}
+
+\setmainfont[Ligatures=TeX]{Linux Libertine O}
+\newcommand\cad{c'est-à-dire\xspace}
+\newcommand\resp{resp.\xspace}
+\newcommand\ssi{si et seulement si\xspace}
+\newcommand\ie{i.e.\xspace}
+\newcommand\eg{e.g.\xspace}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Définition}
+
+\theoremstyle{plain}
+\newtheorem{prop}{Propriété}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remarque}
+\newtheorem{ex}{Exemple}
+
+\title{Stabilité des systèmes dynamiques discrets}
+\author{Gabriel \bsc{Hondet}}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\part{Solution particulière}
+\section{Point critique}
+\begin{defn}[point critique]
+    Soit $f:\mathbb{R}\mapsto \mathbb{R}$,\\
+    $x$ point critique \ssi $f'(x) = 0$
+\end{defn}
+\section{Dérivée Schwarzienne}
+
+\part{Stabilité structurelle}
+\section{Bifurcation}
+\section{C-distance}
+
+
+\end{document}
