@@ -5,6 +5,7 @@
 \usepackage{fontspec}
 \usepackage[frenchb]{babel}
 \usepackage{ellipsis,xspace,xfrac}
+\usepackage{tikz,subfig,graphicx}
 
 \setmainfont[Ligatures=TeX]{Linux Libertine O}
 \newcommand\cad{c'est-à-dire\xspace}
@@ -32,15 +33,55 @@
 \tableofcontents
 
 \part{Solution particulière}
-\section{Point critique}
+\section{Point particulier}
+\subsection{Point fixe}
+\subsection{Point périodique}
+\subsection{Point critique}
 \begin{defn}[point critique]
     Soit $f:\mathbb{R}\mapsto \mathbb{R}$,\\
-    $x$ point critique \ssi $f'(x) = 0$
+    $x$ point critique \ssi $f'(x) = 0$.
 \end{defn}
 \section{Dérivée Schwarzienne}
 
 \part{Stabilité structurelle}
 \section{Bifurcation}
+Stabilité de la fonction selon un paramètre.
+\begin{ex}\label{ex:bif_pol_deg3}
+    Soit $P_\mu(x) = \mu x(1-x^2)$
+    \begin{figure}
+        \centering
+        \subfloat[$\mu = 1/2$]
+        {
+            \begin{tikzpicture}[domain=-1:1,scale=1.5]
+                \draw [->] (0,-1) -- (0,1) node[above] {$y$};
+                \draw [->] (-1,0) -- (1,0) node[right] {$x$};
+                \draw[color=blue] plot[id=lin] function{x};
+                \draw[color=orange] plot[id=deg3] function{0.5*x*(1-x**2)};
+            \end{tikzpicture}\label{sfig:bif_mu0.5}
+        }
+        \quad
+        \subfloat[$\mu = 1$]
+        {
+            \begin{tikzpicture}[domain=-1:1,scale=1.5]
+               \draw [->] (0,-1) -- (0,1) node[above] {$y$};
+               \draw [->] (-1,0) -- (1,0) node[right] {$x$};
+               \draw[color=blue] plot[id=lin] function{x};
+               \draw[color=orange] plot[id=deg3] function{x*(1-x**2)};
+            \end{tikzpicture}\label{sfig:bif_mu1}
+        }
+        \quad
+        \subfloat[$\mu = 2$]
+        {
+            \begin{tikzpicture}[domain=-1:1,scale=1.5]
+               \draw [->] (0,-1) -- (0,1) node[above] {$y$};
+               \draw [->] (-1,0) -- (1,0) node[right] {$x$};
+               \draw[color=blue] plot[id=lin] function{x};
+               \draw[color=orange] plot[id=deg3] function{2*x*(1-x**2)};
+            \end{tikzpicture}\label{sfig:bif_mu2}
+        }
+        \caption{Bifurcation de la fonction $P_\mu(x)$ de l'exemple~\ref{ex:bif_pol_deg3}}\label{fig:bif_deg3}
+    \end{figure}
+\end{ex}
 \section{C-distance}
 
 
