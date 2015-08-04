@@ -61,8 +61,6 @@ def plot_bif_diag():
     i = 0
     y = []
     x = 0. # Corresponds to the value of the parameter
-    #chart = pygal.XY(stroke=False)
-    #chart.title = 'Diagramme de bifurcation'
     with open('bif_diag', 'r') as f:
         for line in f:
             if line[0] == '#':
