@@ -30,59 +30,63 @@ int main(int argc, char* argv[])
         printf("Missing arguments : indicate first function parameter then initial point");
         exit(0);
     }
-	// Initialisation of variables
-	float c = 0, x0 = 0;
-	double *values = NULL;
-	int i = 0;
-	char *fname = NULL;
-	FILE* wrote_f = NULL;
-	// Creation of the array containing orbit
-	values = malloc(MAXITER*sizeof(double));
-	if(values == NULL)
-	{
-		exit(0);
-	}
-	// Name of the file we will write : o_c-x0
-	fname = malloc(13*sizeof(char));
-	c = strtof(argv[1], NULL);
-	x0 = strtof(argv[2], NULL);
-	sprintf(fname, "o_%0.3f-%0.3f", c, x0);
+    /* Initialisation of variables
+     * with c the parameter,
+     * x0 the initial point
+     * values array containing orbit
+     * fname the name of the file */
+    float c = 0, x0 = 0;
+    double *values = NULL;
+    int i = 0;
+    char *fname = NULL;
+    FILE* wrote_f = NULL;
+    // Creation of the array containing orbit
+    values = malloc(MAXITER*sizeof(double));
+    if(values == NULL)
+    {
+        exit(0);
+    }
+    // Name of the file we will write : o_c-x0
+    fname = malloc(13*sizeof(char));
+    c = strtof(argv[1], NULL);
+    x0 = strtof(argv[2], NULL);
+    sprintf(fname, "o_%0.3f-%0.3f", c, x0);
 
-	// Calculation of the orbit
-	values[0] = x0;
-	calculate_orbit(values, c, quadratic_c);
+    // Calculation of the orbit
+    values[0] = x0;
+    calculate_orbit(values, c, quadratic_c);
 
-	// Writing
-	wrote_f = fopen(fname, "w");
-	if(wrote_f == NULL)
-	{
-		printf("Erreur d'ouverture fichier");
-	}
-	else
-	{
-		fprintf(wrote_f,"#%f orbit\n", x0);
-		for(i = 0 ; i <= MAXITER ; i++)
-		{
-			fprintf(wrote_f, "%f\n", values[i]);
-		}
-		fclose(wrote_f);
-	}
-	free(values);
+    // Writing
+    wrote_f = fopen(fname, "w");
+    if(wrote_f == NULL)
+    {
+        printf("Erreur d'ouverture fichier");
+    }
+    else
+    {
+        fprintf(wrote_f,"#%f orbit\n", x0);
+        for(i = 0 ; i <= MAXITER ; i++)
+        {
+            fprintf(wrote_f, "%f\n", values[i]);
+        }
+        fclose(wrote_f);
+    }
+    free(values);
 
-	return 0;
+    return 0;
 }
 
 void calculate_orbit(double *values, float c, double (*F)(float, double))
 {
-	int i = 0;
-	for(i = 1 ; i <= MAXITER ; i++)
-	{
-		values[i] = F(c, values[i - 1]);
-	}
+    int i = 0;
+    for(i = 1 ; i <= MAXITER ; i++)
+    {
+        values[i] = F(c, values[i - 1]);
+    }
 
 }
 
 double quadratic_c(float c, double x)
 {
-	return c*x*(1-x);
+    return c*x*(1-x);
 }

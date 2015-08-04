@@ -20,6 +20,7 @@
 #ifndef BIF_DIAG_H_
 #define BIF_DIAG_H_
 #define ITER_BIF 500
+#define BIF_NOT_PLOT 100
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

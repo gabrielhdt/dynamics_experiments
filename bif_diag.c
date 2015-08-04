@@ -26,18 +26,44 @@
 #include "bif_diag.h"
 int main(int argc, char* argv[])
 {
+    if(argc <= 1)
+    {
+        printf("Bifurcation diagram generator, Copyright (C) 2015 Gabriel Hondet\n");
+        printf("BDG comes with ABSOLUTELY NO WARRANTY; for details type `show w'.\n");
+        printf("This is free software, and you are welcome to redistribute it\n");
+        printf("under certain conditions; type `show c' for details.\n");
+        printf("Missing argument : indicate the number of values for the parameter of the function");
+        exit(0);
+    }
+    /* Initialisation of variables
+     * orbit contains the orbit
+     * i and j are counters
+     * n_iter is the number of values of the parameter tested
+     * n_c is the number of values of the parameter used to compute the
+     * orbit
+     * c is the parameter of the function
+     * c_min is the minimal value of the parameter
+     * c_max is the maximum value
+     * pas is the distance between two different consecutive values of c
+     * x0 is the initial point
+     * fname and wrote_f are the name of the file and the file written*/
+
     double *orbit = NULL;
-    int i = 0 ,j = 0,n_iter = 0, n_c = 100;
+    int i = 0 ,j = 0, n_c = 0;
     float c = 0, c_min = 0, c_max = 4, pas = 0;
     double x0 = 0.23748;
     char *fname = NULL;
     FILE* wrote_f = NULL;
     orbit = malloc(ITER_BIF*sizeof(double));
+    // Number of parameters, as cli option
+    n_c = strtof(argv[1], NULL);
+    // Create orbit array
     if(orbit == NULL)
     {
         printf("Error initializing orbit\n");
         exit(0);
     }
+    // Create file and write a line
     fname = malloc(12*sizeof(char));
     sprintf(fname, "bif_diag_%0.3f", x0);
     wrote_f = fopen(fname, "w");
@@ -45,22 +71,22 @@ int main(int argc, char* argv[])
         exit(0);
     else
         fprintf(wrote_f, "#Diagramme de bifurcation");
-
+    
     /* On essaie d'abord la fonction
      * quadratique avec 0<c<4
      * On définit le nombre de valeurs de c
      * pas = étendue/ nombre de valeurs*/
     pas = fabsf(c_max - c_min)/n_c;
     printf("%f\n", pas);
-    n_iter = 100;
-    for(i = 0 ; i <= n_iter ; i++)
+    //n_iter = 100;
+    for(i = 0 ; i <= n_c ; i++)
     {
         memset(orbit, 0, ITER_BIF*sizeof(double));
         orbit[0] = x0;
         calculate_orbit(orbit, c, quadratic_c);
         fprintf(wrote_f, "\n%0.3f:", c);
         // We don't plot the first 100 points
-        for(j = 100 ; j <= ITER_BIF ; j++)
+        for(j = BIF_NOT_PLOT ; j <= ITER_BIF ; j++)
         {
             fprintf(wrote_f, "%f;", orbit[j]);
         }
