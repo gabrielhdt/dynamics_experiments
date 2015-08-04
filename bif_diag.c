@@ -46,7 +46,8 @@ int main(int argc, char* argv[])
      * c_max is the maximum value
      * pas is the distance between two different consecutive values of c
      * x0 is the initial point
-     * fname and wrote_f are the name of the file and the file written*/
+     * fname and wrote_f are the name of the file and the file written
+     * all *_tikz are for files used with tikz and LaTeX*/
 
     double *orbit = NULL;
     int i = 0 ,j = 0, n_c = 0;
@@ -54,6 +55,8 @@ int main(int argc, char* argv[])
     double x0 = 0.23748;
     char *fname = NULL;
     FILE* wrote_f = NULL;
+    char *fname_tikz = NULL;
+    FILE* wrote_f_tikz = NULL;
     orbit = malloc(ITER_BIF*sizeof(double));
     // Number of parameters, as cli option
     n_c = strtof(argv[1], NULL);
@@ -65,19 +68,26 @@ int main(int argc, char* argv[])
     }
     // Create file and write a line
     fname = malloc(12*sizeof(char));
+    fname_tikz = malloc(16*sizeof(char));
     sprintf(fname, "bif_diag_%0.3f", x0);
+    sprintf(fname_tikz, "bif_diag_%0.3ftikz", x0);
     wrote_f = fopen(fname, "w");
     if(wrote_f == NULL)
         exit(0);
     else
         fprintf(wrote_f, "#Diagramme de bifurcation");
     
+    wrote_f_tikz = fopen(fname_tikz, "w");
+    if(wrote_f_tikz == NULL)
+        exit(0);
+    else
+        fprintf(wrote_f_tikz, "x,y\n");
+    
     /* On essaie d'abord la fonction
      * quadratique avec 0<c<4
      * On définit le nombre de valeurs de c
      * pas = étendue/ nombre de valeurs*/
     pas = fabsf(c_max - c_min)/n_c;
-    printf("%f\n", pas);
     //n_iter = 100;
     for(i = 0 ; i <= n_c ; i++)
     {
@@ -89,11 +99,13 @@ int main(int argc, char* argv[])
         for(j = BIF_NOT_PLOT ; j <= ITER_BIF ; j++)
         {
             fprintf(wrote_f, "%f;", orbit[j]);
+            fprintf(wrote_f_tikz, "%d,%f\n", i, orbit[j]);
         }
         c += pas;
     }
     free(orbit);
     fclose(wrote_f);
+    fclose(wrote_f_tikz);
 
     return 0;
 }
