@@ -28,16 +28,24 @@ def main():
     Fonction principale
     """
     message = 0.1654
-    key = 0.12
     # Chiffrage :
     ciphered = message
     iteration = 5  # Nombre d'itérations
     for i in range(iteration):
         ciphered = F_1(ciphered)
+    # Calcul de la clef : on prend k < int(1 - C)
+    key = (1 - ciphered)/3
     ciphered = ciphered + key - int(ciphered + key)
 
     # Déchiffrage
     deciphered = ciphered - key
+    for i in range(iteration):
+        deciphered = F(deciphered)
+        print(deciphered)
+    print("Différence : {}".format(deciphered - message))
+
+    # Déchiffrage avec une fausse clef
+    deciphered = ciphered - (key + .1)
     for i in range(iteration):
         deciphered = F(deciphered)
         print(deciphered)
