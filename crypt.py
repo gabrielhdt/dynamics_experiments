@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  [filename.py]
+#  crypt.py
 #
-#  Copyright [yyyy] Gabriel Hondet <gabrielhondet@gmail.com>
+#  Copyright 2015 Gabriel Hondet <gabrielhondet@gmail.com>
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -28,28 +28,16 @@ def main():
     Fonction principale
     """
     message = 0.1654
-    # Chiffrage :
-    ciphered = message
-    iteration = 5  # Nombre d'itérations
-    for i in range(iteration):
-        ciphered = F_1(ciphered)
-    # Calcul de la clef : on prend k < int(1 - C)
-    key = (1 - ciphered)/3
-    ciphered = ciphered + key - int(ciphered + key)
+    iterations = 5
 
-    # Déchiffrage
-    deciphered = ciphered - key
-    for i in range(iteration):
-        deciphered = F(deciphered)
-        print(deciphered)
-    print("Différence : {}".format(deciphered - message))
-
-    # Déchiffrage avec une fausse clef
-    deciphered = ciphered - (key + .1)
-    for i in range(iteration):
-        deciphered = F(deciphered)
-        print(deciphered)
-    print("Différence : {}".format(deciphered - message))
+    # Chiffrage
+    pre_ciphered = pre_cipher(message, F_1, iterations)
+    key, ciphered = add_key(pre_ciphered, create_key)
+    print(ciphered)
+    deciphered = decipher(ciphered, iterations, key)
+    print(deciphered)
+    deciphered_wrong_key = decipher(ciphered, iterations, key - .01)
+    print(deciphered_wrong_key)
 
 
 def F(x):
@@ -70,6 +58,44 @@ def F_1(x):
         return (1 + np.sqrt(1 - x))/2
     elif bit == 0:
         return (1 - np.sqrt(1 - x))/2
+
+
+def pre_cipher(message, F_1, iterations):
+    """
+    Fonction de chiffrage du message, avec F la fonction itérée iterations
+    fois. La fonction n'ajoute pas la clef, on n'obtient donc pas le message
+    chiffré final.
+    """
+    pre_ciphered = message
+    for i in range(iterations):
+        pre_ciphered = F_1(pre_ciphered)
+    return pre_ciphered
+
+
+def create_key(pre_ciphered):
+    """
+    Fonction de création de la clef. La clef doit respecter certaines
+    contraintes, ici k < 1 - c (c le flottant chiffré)
+    """
+    return (1 - pre_ciphered)/3
+
+
+def add_key(pre_ciphered, calculate_key):
+    """
+    Fonction d'addition de la clef. Renvoit le message chiffré
+    """
+    key = create_key(pre_ciphered)
+    return key, pre_ciphered + key - int(pre_ciphered + key)
+
+
+def decipher(ciphered, iterations, key):
+    """
+    Fonction de déchiffrage.
+    """
+    deciphered = ciphered - key
+    for i in range(iterations):
+        deciphered = F(deciphered)
+    return deciphered
 
 
 if __name__ == "__main__":
