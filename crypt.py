@@ -19,25 +19,21 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 #
-import numpy as np
 import random
+import math
 
 
 def main():
     """
     Fonction principale
     """
-    message = 0.1654
-    iterations = 5
+    m = 0.5674
+    k = 0.4326
 
-    # Chiffrage
-    pre_ciphered = pre_cipher(message, F_1, iterations)
-    key, ciphered = add_key(pre_ciphered, create_key)
-    print(ciphered)
-    deciphered = decipher(ciphered, iterations, key)
-    print(deciphered)
-    deciphered_wrong_key = decipher(ciphered, iterations, key - .01)
-    print(deciphered_wrong_key)
+    crypted = cipher(m, k, 20)
+    decrypted = decipher(crypted, k, 20)
+    print(crypted, decrypted)
+    print("Différence :{}".format(decrypted - m))
 
 
 def F(x):
@@ -55,48 +51,59 @@ def F_1(x):
     """
     bit = random.getrandbits(1)
     if bit == 1:
-        return (1 + np.sqrt(1 - x))/2
+        return (1 + math.sqrt(1 - x))/2
     elif bit == 0:
-        return (1 - np.sqrt(1 - x))/2
+        return (1 - math.sqrt(1 - x))/2
 
 
-def pre_cipher(message, F_1, iterations):
+def add_key(message, key):
     """
-    Fonction de chiffrage du message, avec F la fonction itérée iterations
-    fois. La fonction n'ajoute pas la clef, on n'obtient donc pas le message
-    chiffré final.
+    Ajoute la clef de la manière suivante:
+    return (message + key)/2 de manière à avoir
+    phi:[0,1]x[0,1]->[0,1]
     """
-    pre_ciphered = message
-    for i in range(iterations):
-        pre_ciphered = F_1(pre_ciphered)
-    return pre_ciphered
+    return (message + key)/2
 
 
-def create_key(pre_ciphered):
+def cipher(message, key, rounds):
     """
-    Fonction de création de la clef. La clef doit respecter certaines
-    contraintes, ici k < 1 - c (c le flottant chiffré)
+    Chiffre le message à l'aide de tous les programmes définis
+    précédemment
+    Crée une sous clef puis passe dans la fonction chaotique
+    message + sous clef
+    On utilise les notations suivantes:
+    message = mk,
+    message après la fonction: fk;
+    message chiffré avec clef ajoutée: ck.
     """
-    return (1 - pre_ciphered)/3
+    for i in range(rounds):
+        key = F(key)
+        message = F_1(message)
+        message = add_key(message, key)
+    return message
 
 
-def add_key(pre_ciphered, calculate_key):
+def remove_key(cipher, key):
     """
-    Fonction d'addition de la clef. Renvoit le message chiffré
+    Enlève la sous clef
     """
-    key = create_key(pre_ciphered)
-    return key, pre_ciphered + key - int(pre_ciphered + key)
+    return 2*cipher - key
 
 
-def decipher(ciphered, iterations, key):
+def decipher(cipher, key, rounds):
     """
-    Fonction de déchiffrage.
+    Déchiffre le message. On crée d'abord la liste de sous clefs, puis on
+    déchiffre le message
     """
-    deciphered = ciphered - key
-    for i in range(iterations):
-        deciphered = F(deciphered)
-    return deciphered
+    list_subkeys = []
+    for i in range(rounds):
+        key = F(key)
+        list_subkeys.append(key)
 
+    for i in range(rounds):
+        cipher = remove_key(cipher, list_subkeys.pop())
+        cipher = F(cipher)
+    return cipher
 
 if __name__ == "__main__":
     main()
