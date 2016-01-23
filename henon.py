@@ -22,11 +22,22 @@ def main():
     for i in range(1, N):
         points[:, i] = H(points[0, i - 1], points[1, i - 1])
 
+    # Ecriture des fichiers
+    write_to_file(points)
+
     # Résultats et graphs
     plt.plot(points[0, :], points[1, :], '.')
     plt.show()
     plt.plot([i for i in range(N)], points[0, :])
     plt.show()
+
+
+def write_to_file(points):
+    N = points.shape[1]
+    with open('henon.csv', 'w') as f:
+        f.write("a,b,c\n")
+        for i in range(N):
+            f.write("{},{},{}\n".format(i, points[0, i], points[1, i]))
 
 
 if __name__ == "__main__":
