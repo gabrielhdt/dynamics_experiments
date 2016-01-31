@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[])
 {
-    int gpa_size = 10000, c, i;
+    int gpa_size = 1000000, c, i;
     double *points_quad = NULL;
     int *gpa_tab = NULL;
     FILE* wrote_f = NULL;
@@ -26,19 +26,21 @@ int main(int argc, char* argv[])
     }
 
     // Ecriture dans un fichier
-    wrote_f = fopen("quad_gpa_bin", "bw");
-    fwrite(gpa_tab, sizeof(int), gpa_size - 1, wrote_f);
-/*    for(i = 0 ; i < gpa_size ; i++)
+    wrote_f = fopen("quad_gpa_bin", "w");
+    // En-têtes de dieharder
+    fprintf(wrote_f, "type: d\n");
+    fprintf(wrote_f, "count: %d\n", gpa_size);
+    fprintf(wrote_f, "numbit: 32\n");
+    for(i = 0 ; i < gpa_size ; i++)
     {
         fprintf(wrote_f, "%d\n", gpa_tab[i]);
-    }*/
+    }
 
-    // Affichage
+/*    // Affichage
     for(i = 0; i < 30 ; i++)
     {
-//        printf("%f", points_quad[i]);
         printf("%d", gpa_tab[i]);
-    }
+    }*/
 
     return 0;
 }
@@ -59,6 +61,21 @@ struct vec henon(struct vec xn)
 
 int gpa_det(double x)
 {
-    return (int) 10*x;
+    return (int) 100*x;
 }
 
+int gpa_det_henon(struct vec pt)
+{
+    if (pt.x > pt.y)
+    {
+        return 1;
+    }
+    else if (pt.x < pt.y)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+}

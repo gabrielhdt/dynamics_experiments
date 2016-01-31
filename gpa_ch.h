@@ -13,4 +13,5 @@ struct vec
 double quadratic_c(float, double);
 struct vec henon(struct vec);
 int gpa_det(double);
+int gpa_det_henon(struct vec);
 #endif
