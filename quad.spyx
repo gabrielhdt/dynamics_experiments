@@ -1,0 +1,21 @@
+cdef extern from "quad.c":
+    double quad(double x, float c)
+
+
+def orbit(xi, c, niter):
+    orbit = [None for i in range(niter)]
+    orbit[0] = xi
+    for i in range(1, niter):
+        orbit[i] = quad(orbit[i - 1], c)
+    return orbit
+
+def bif_diag(xi, cmin, cmax, pas_c, niter):
+    nc = int((cmax - cmin)/pas_c) + 1
+    diag = []
+    c_list = [pas_c*i for i in range(nc)]
+    n_ignore = 100
+    for c in c_list:
+        #diag.append(orbit(xi, c, niter)[n_ignore:-1])
+        for o in orbit(xi, c, niter):
+            diag.append((c, o))
+    return diag
